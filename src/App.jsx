@@ -9,6 +9,8 @@ export default function App() {
   const [servicioSeleccionado, setServicioSeleccionado] = useState("");
   const [horarioSeleccionado, setHorarioSeleccionado] = useState("");
   const [fechaSeleccionada, setFechaSeleccionada] = useState("");
+  const [nombreCliente, setNombreCliente] = useState("");
+  const [telefonoCliente, setTelefonoCliente] = useState("");
 
   const linkWhatsapp = "https://wa.me/593981096346";
   const linkFacebook = "https://www.facebook.com/share/1DtyQ8Pu3W/";
@@ -52,10 +54,12 @@ export default function App() {
   const guardarCita = async () => {
 
   if (
-    !servicioSeleccionado ||
-    !horarioSeleccionado ||
-    !fechaSeleccionada
-  ) {
+  !nombreCliente ||
+  !telefonoCliente ||
+  !servicioSeleccionado ||
+  !horarioSeleccionado ||
+  !fechaSeleccionada
+ ) {
     alert("Completa todos los campos");
     return;
   }
@@ -63,17 +67,22 @@ export default function App() {
   try {
 
     await addDoc(collection(db, "citas"), {
-      servicio: servicioSeleccionado,
-      horario: horarioSeleccionado,
-      fecha: fechaSeleccionada,
-      fechaRegistro: new Date()
-    });
+  nombre: nombreCliente,
+  telefono: telefonoCliente,
+  servicio: servicioSeleccionado,
+  horario: horarioSeleccionado,
+  fecha: fechaSeleccionada,
+  estado: "Pendiente",
+  fechaRegistro: new Date()
+ });
 
     alert("Cita registrada correctamente");
 
     setServicioSeleccionado("");
     setHorarioSeleccionado("");
     setFechaSeleccionada("");
+    setNombreCliente("");
+    setTelefonoCliente("");
 
   } catch (error) {
     console.error(error);
@@ -288,7 +297,37 @@ export default function App() {
               <p className="text-xs text-gray-500 max-w-xs">Elige el servicio deseado, la fecha en el calendario y confirma tu cita en menos de un minuto.</p>
             </div>
             
-           <div className="space-y-5 bg-white p-5 rounded-xl border border-[#F0E2E2] shadow-sm">
+       <div className="space-y-5 bg-white p-5 rounded-xl border border-[#F0E2E2] shadow-sm">
+
+  {/* NOMBRE */}
+  <div>
+    <label className="block text-xs font-semibold uppercase text-gray-400 mb-1">
+      Nombre completo
+    </label>
+
+    <input
+      type="text"
+      value={nombreCliente}
+      onChange={(e) => setNombreCliente(e.target.value)}
+      placeholder="Ingresa tu nombre"
+      className="w-full bg-[#FCF8F8] border border-gray-200 rounded-lg p-2 text-sm focus:outline-none focus:border-[#B87373]"
+    />
+  </div>
+
+  {/* TELÉFONO */}
+  <div>
+    <label className="block text-xs font-semibold uppercase text-gray-400 mb-1">
+      Teléfono
+    </label>
+
+    <input
+      type="tel"
+      value={telefonoCliente}
+      onChange={(e) => setTelefonoCliente(e.target.value)}
+      placeholder="09xxxxxxxx"
+      className="w-full bg-[#FCF8F8] border border-gray-200 rounded-lg p-2 text-sm focus:outline-none focus:border-[#B87373]"
+    />
+  </div>
 
   {/* FECHA */}
   <div>
