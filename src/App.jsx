@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { collection, addDoc } from "firebase/firestore";
+import {collection,addDoc,query,where,getDocs} from "firebase/firestore";
 import { db } from "./firebase";
 
 export default function App() {
@@ -66,6 +66,18 @@ export default function App() {
 
   try {
 
+    const consulta = query(
+  collection(db, "citas"),
+  where("fecha", "==", fechaSeleccionada),
+  where("horario", "==", horarioSeleccionado)
+);
+
+const resultado = await getDocs(consulta);
+
+if (!resultado.empty) {
+  alert("⚠️ Este horario ya está reservado. Selecciona otro.");
+  return;
+}
     await addDoc(collection(db, "citas"), {
   nombre: nombreCliente,
   telefono: telefonoCliente,
